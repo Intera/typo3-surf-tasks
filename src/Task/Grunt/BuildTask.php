@@ -1,5 +1,5 @@
 <?php
-namespace De\Intera\Surf\Task\Grunt;
+namespace Intera\Surf\Task\Grunt;
 
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;

@@ -1,5 +1,5 @@
 <?php
-namespace De\Intera\Surf\Task\CMS;
+namespace Intera\Surf\Task\CMS;
 
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
