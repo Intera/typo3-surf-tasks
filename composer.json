@@ -1,0 +1,13 @@
+{
+    "name": "intera/typo3-surf-tasks",
+    "description": "A collection of TYPO3 surf tasks",
+    "license": "GPL-3.0+",
+    "require": {
+        "typo3/surf": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Intera\\Surf\\": "src"
+        }
+    }
+}
