@@ -3,11 +3,14 @@
     "description": "A collection of TYPO3 surf tasks",
     "license": "GPL-3.0+",
     "require": {
-        "typo3/surf": "*"
+        "typo3/surf": "^2.0.0-beta"
     },
     "autoload": {
         "psr-4": {
             "Intera\\Surf\\": "src"
         }
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^2.6"
     }
 }

@@ -1,0 +1,48 @@
+language: php
+
+php:
+  - 5.6
+  - 7
+
+sudo: false
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+before_install:
+  - phpenv config-rm xdebug.ini
+  - composer self-update
+  - composer --version
+  - if [ "$GITHUB_COMPOSER_AUTH" ]; then composer config -g github-oauth.github.com $GITHUB_COMPOSER_AUTH; fi
+
+before_script:
+  - vendor/bin/phpcs --config-set installed_paths tests/CodeSniffer
+
+script:
+  - >
+    echo;
+    echo "Running phpcs";
+    ./vendor/bin/phpcs
+
+  # Basic functional tests - all commands should exit with 0
+  - ./typo3cms help && [ ! -f "$TYPO3_PATH_WEB/typo3conf/PackageStates.php" ]
+  - ./typo3cms install:setup --non-interactive --database-user-name="root" --database-host-name="localhost" --database-port="3306" --database-name="travis_test" --admin-user-name="admin" --admin-password="password" --site-name="Travis Install"
+  - ./typo3cms help
+  - ./typo3cms backend:lock
+  - ./typo3cms backend:unlock
+  - ./typo3cms cache:flush
+  - ./typo3cms cache:listgroups
+  - ./typo3cms cleanup:updatereferenceindex
+  - ./typo3cms database:updateschema "*"
+  - ./typo3cms database:export > /dev/null
+  - echo "SELECT username from be_users where admin=1;" | ./typo3cms database:import
+  - ./typo3cms frontend:request / > /dev/null
+  - ./typo3cms documentation:generatexsd TYPO3\\CMS\\Fluid\\ViewHelpers > /dev/null
+  - ./typo3cms configuration:show BE/installToolPassword
+  - ./typo3cms configuration:showLocal BE/installToolPassword
+  - ./typo3cms configuration:showActive BE/installToolPassword
+  - ./typo3cms configuration:set BE/installToolPassword foobar && grep installToolPassword $TYPO3_PATH_WEB/typo3conf/LocalConfiguration.php | grep foobar
+  - ./typo3cms configuration:remove BE/installToolPassword --force && grep -qv installToolPassword $TYPO3_PATH_WEB/typo3conf/LocalConfiguration.php
+  - ./typo3cms configuration:set BE/installToolPassword blablupp && grep installToolPassword $TYPO3_PATH_WEB/typo3conf/LocalConfiguration.php | grep blablupp
+  - rm -f $TYPO3_PATH_WEB/typo3conf/PackageStates.php && ./typo3cms install:generatepackagestates && [ -f "$TYPO3_PATH_WEB/typo3conf/PackageStates.php" ]
+  - rm $TYPO3_PATH_WEB/typo3temp/index.html && ./typo3cms install:fixfolderstructure && [ -f "$TYPO3_PATH_WEB/typo3temp/index.html" ]
