@@ -62,4 +62,18 @@ class BuildTask extends Task implements ShellCommandServiceAwareInterface
 
         $this->shell->executeOrSimulate($command, $node, $deployment);
     }
+
+    /**
+     * Simulate this task (e.g. by logging commands it would execute)
+     *
+     * @param  Node $node
+     * @param  Application $application
+     * @param  Deployment $deployment
+     * @param  array $options
+     * @return void
+     */
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    {
+        $this->execute($node, $application, $deployment, $options);
+    }
 }
