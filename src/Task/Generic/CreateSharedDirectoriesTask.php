@@ -4,10 +4,13 @@ namespace Intera\Surf\Task\Generic;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
+use TYPO3\Surf\Domain\Model\Task;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface;
+use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
 
-class CreateSharedDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task implements \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareInterface
+class CreateSharedDirectoriesTask extends Task implements ShellCommandServiceAwareInterface
 {
-    use \TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
+    use ShellCommandServiceAwareTrait;
 
     /**
      * Execute this task
@@ -18,15 +21,15 @@ class CreateSharedDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task implemen
      * @param array $options
      * @return void
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if (!isset($options['directories']) || !is_array($options['directories']) || $options['directories'] === array()) {
+        if (!isset($options['directories']) || !is_array($options['directories']) || $options['directories'] === []) {
             return;
         }
 
-        $commands = array(
+        $commands = [
             'cd ' . $application->getSharedPath()
-        );
+        ];
         foreach ($options['directories'] as $path) {
             $commands[] = 'mkdir -p ' . $path;
         }
@@ -43,7 +46,7 @@ class CreateSharedDirectoriesTask extends \TYPO3\Surf\Domain\Model\Task implemen
      * @param array $options
      * @return void
      */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $this->execute($node, $application, $deployment, $options);
     }

@@ -20,11 +20,17 @@ class CMS extends SurfCMS
         $workflow->removeTask('TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask');
         $workflow->defineTask(
             'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
-            \Intera\Surf\Task\Composer\InstallTask::class, array(
+            \Intera\Surf\Task\Composer\InstallTask::class,
+            [
                 'nodeName' => 'localhost',
                 'useApplicationWorkspace' => true
-            )
+            ]
         );
-        $workflow->afterTask('TYPO3\\Surf\\Task\\Package\\GitTask', 'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask', $this);
+        $workflow->afterTask(
+            'TYPO3\\Surf\\Task\\Package\\GitTask',
+            'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
+            $this
+        );
+        );
     }
 }

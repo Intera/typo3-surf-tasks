@@ -21,13 +21,24 @@ class EnableExtensionsTask extends AbstractCliTask
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      * @return void
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array())
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        if ($application instanceof \TYPO3\Surf\Application\TYPO3\CMS && !$this->packageExists('deployutils', $node, $application, $deployment, $options)) {
-            throw new \TYPO3\Surf\Exception\InvalidConfigurationException('Extension "deployutils" is not found! Make sure it is available in your project, or remove this task in your deployment configuration!', 1454009509);
+        if ($application instanceof \TYPO3\Surf\Application\TYPO3\CMS && !$this->packageExists(
+            'deployutils',
+            $node,
+            $application,
+            $deployment,
+            $options
+        )
+        ) {
+            throw new \TYPO3\Surf\Exception\InvalidConfigurationException(
+                'Extension "deployutils" is not found! Make sure it is available in your project, ' .
+                'or remove this task in your deployment configuration!',
+                1454009509
+            );
         }
         $this->executeCliCommand(
-            array('typo3/cli_dispatch.phpsh', 'extbase', 'deploylocal:loadextensions'),
+            ['typo3/cli_dispatch.phpsh', 'extbase', 'deploylocal:loadextensions'],
             $node,
             $application,
             $deployment,
