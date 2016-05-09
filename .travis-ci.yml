@@ -22,7 +22,7 @@ script:
   - >
     echo;
     echo "Running phpcs";
-    ./vendor/bin/phpcs
+    ./vendor/bin/phpcs --standard=PSRDefault src
 
   # Basic functional tests - all commands should exit with 0
   - ./typo3cms help && [ ! -f "$TYPO3_PATH_WEB/typo3conf/PackageStates.php" ]
