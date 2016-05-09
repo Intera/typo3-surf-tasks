@@ -36,10 +36,10 @@ class BuildTask extends Task implements ShellCommandServiceAwareInterface
         if (isset($options['nodeName'])) {
             $node = $deployment->getNode($options['nodeName']);
             if ($node === null) {
-                throw new \TYPO3\Surf\Exception\InvalidConfigurationException(sprintf(
-                    'Node "%s" not found',
-                    $options['nodeName']
-                ), 1432127050);
+                throw new \TYPO3\Surf\Exception\InvalidConfigurationException(
+                    sprintf('Node "%s" not found', $options['nodeName']),
+                    1432127050
+                );
             }
         }
 
