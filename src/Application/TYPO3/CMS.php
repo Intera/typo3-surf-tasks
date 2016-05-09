@@ -5,6 +5,10 @@ use TYPO3\Surf\Application\TYPO3\CMS as SurfCMS;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
 
+/**
+ * Improves the TYPO3 CMS application with some extra features like:
+ * Using a more customizable Composer task, registering a grunt build task.
+ */
 class CMS extends SurfCMS
 {
     /**
@@ -31,6 +35,36 @@ class CMS extends SurfCMS
             'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
             $this
         );
+
+        $this->registerFrontendBuildTasks($workflow);
+    }
+
+    /**
+     * Registers a Grunt build task if the project Extension path was specified in the options.
+     *
+     * @param Workflow $workflow
+     */
+    protected function registerFrontendBuildTasks(Workflow $workflow)
+    {
+        if (!$this->hasOption('projectExtensionPath')) {
+            return;
+        }
+
+        $projectExtensionPath = rtrim($this->getOption('projectExtensionPath'), '/');
+
+        $workflow->defineTask(
+            'Intera\\Surf\\DefinedTask\\Grunt\\BuildTask',
+            \Intera\Surf\Task\Grunt\BuildTask::class,
+            [
+                'forceLocalMode' => true,
+                'gruntRootPath' => $projectExtensionPath . '/Resources/Private/Build',
+                'skipMissingDirectory' => true
+            ]
+        );
+        $workflow->afterTask(
+            'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
+            'Intera\\Surf\\DefinedTask\\Grunt\\BuildTask',
+            $this
         );
     }
 }
