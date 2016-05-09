@@ -1,6 +1,7 @@
 <?php
 namespace Intera\Surf\Task\Grunt;
 
+use Intera\Surf\Service\PathReplacementTrait;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -13,6 +14,7 @@ use TYPO3\Surf\Domain\Service\ShellCommandServiceAwareTrait;
  */
 class BuildTask extends Task implements ShellCommandServiceAwareInterface
 {
+    use PathReplacementTrait;
     use ShellCommandServiceAwareTrait;
 
     /**
@@ -47,17 +49,23 @@ class BuildTask extends Task implements ShellCommandServiceAwareInterface
             $node = $deployment->getNode('localhost');
         }
 
-        $gruntRootPath = escapeshellarg($options['gruntRootPath']);
+        $gruntRootPath = $this->replacePathPlaceholders($options['gruntRootPath'], $application, $deployment);
+        $gruntRootPath = escapeshellarg($gruntRootPath);
+        $exitCodeIfRootDoesNotExist = !empty($options['skipMissingDirectory']) ? 0 : 1;
         $command = '
 
 			if [ ! -d ' . $gruntRootPath . ' ]; then
-				echo "Grunt root path $gruntRootPath does not exist."
-				exit 1;
+				echo "Grunt root path ' . $gruntRootPath . ' does not exist."
+				exit ' . $exitCodeIfRootDoesNotExist . ';
 			fi
 
-			cd ' . $gruntRootPath . ' &&
-			npm install &&
-			grunt
+			# Break on errors
+			set -e
+
+			cd ' . $gruntRootPath . '
+			if [ -f package.json ]; then npm install; fi
+			if [ -f bower.json ]; then bower install; fi
+			if [ -f Gruntfile.js ]; then grunt; fi
 		';
 
         $this->shell->executeOrSimulate($command, $node, $deployment);
