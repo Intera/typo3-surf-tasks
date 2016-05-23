@@ -37,6 +37,25 @@ class CMS extends SurfCMS
         );
 
         $this->registerFrontendBuildTasks($workflow);
+        $this->registerDeployutilsOpcacheClearingTask($workflow);
+    }
+
+    /**
+     * Registers the deployutils task for clearing the opcache.
+     *
+     * @param Workflow $workflow
+     */
+    protected function registerDeployutilsOpcacheClearingTask(Workflow $workflow)
+    {
+        if (!$this->hasOption('deployutilsToken')) {
+            return;
+        }
+
+        $workflow->afterStage(
+            'switch',
+            \Intera\Surf\Task\Deployutils\ClearOpcacheTask::class,
+            $this
+        );
     }
 
     /**
