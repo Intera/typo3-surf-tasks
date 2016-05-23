@@ -37,11 +37,28 @@ class CMS extends SurfCMS
         );
 
         $this->registerFrontendBuildTasks($workflow);
+        $this->registerDeployutilsCacheClearingTask($workflow);
         $this->registerDeployutilsOpcacheClearingTask($workflow);
     }
 
     /**
+     * Registers the task for clearing the TYPO3 cache using the deployutils extension.
+     *
+     * @param Workflow $workflow
+     */
+    protected function registerDeployutilsCacheClearingTask(Workflow $workflow)
+    {
+        $workflow->afterStage(
+            'switch',
+            \Intera\Surf\Task\Deployutils\ClearCacheTask::class,
+            $this
+        );
+    }
+
+    /**
      * Registers the deployutils task for clearing the opcache.
+     *
+     * This task should run AFTER the clearing of the TYPO3 caches, this seems to work better.
      *
      * @param Workflow $workflow
      */
