@@ -37,6 +37,7 @@ abstract class AbstractDeployCommandTask extends \TYPO3\Surf\Task\TYPO3\CMS\Abst
                 'The Extension "deployutils" was not found! Make sure one is available in your project, or remove' .
                 ' this task (' . __CLASS__ . ') from your deployment configuration!'
             );
+            return;
         }
 
         $cliArguments = array_merge(['typo3/cli_dispatch.phpsh', 'extbase'], $this->getCliArguments());
