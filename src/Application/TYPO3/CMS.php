@@ -12,6 +12,33 @@ use TYPO3\Surf\Domain\Model\Workflow;
 class CMS extends SurfCMS
 {
     /**
+     * Initializes some sane default options.
+     *
+     * @param string $name
+     */
+    public function __construct($name)
+    {
+        parent::__construct($name);
+        $this->options = array_merge(
+            $this->options,
+            [
+                'composerCommandPath' => 'composer',
+                'composerFlags' => '--ignore-platform-reqs --prefer-dist',
+                'keepReleases' => 3,
+                'rsyncExcludes' => [
+                    'deployment',
+                    '.git',
+                    '.gitignore',
+                    '.gitattributes',
+                    'node_modules',
+                    'surf.php',
+                    'dynamicReturnTypeMeta.json'
+                ]
+            ]
+        );
+    }
+
+    /**
      * Register tasks for this application
      *
      * @param Workflow $workflow
