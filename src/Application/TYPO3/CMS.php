@@ -33,7 +33,7 @@ class CMS extends SurfCMS
                     '.gitignore',
                     '.gitlab-ci.yml',
                     'node_modules',
-                    'surf.php',
+                    'surf',
                     'dynamicReturnTypeMeta.json'
                 ]
             ]
