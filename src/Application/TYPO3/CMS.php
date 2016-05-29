@@ -29,8 +29,9 @@ class CMS extends SurfCMS
                     'deployment',
                     'vagrant',
                     '.git',
-                    '.gitignore',
                     '.gitattributes',
+                    '.gitignore',
+                    '.gitlab-ci.yml',
                     'node_modules',
                     'surf.php',
                     'dynamicReturnTypeMeta.json'
