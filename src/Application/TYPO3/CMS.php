@@ -27,6 +27,7 @@ class CMS extends SurfCMS
                 'keepReleases' => 3,
                 'rsyncExcludes' => [
                     'deployment',
+                    'vagrant',
                     '.git',
                     '.gitignore',
                     '.gitattributes',
