@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5e18981b7fbe59f224a72c0b175ed43e",
-    "content-hash": "5a03c8f380c148581da3642566979265",
+    "content-hash": "51a480c3e246b82b3eeaa2fd7b3af3d2",
     "packages": [
         {
             "name": "ircmaxell/random-lib",
@@ -59,7 +58,7 @@
                 "random-numbers",
                 "random-strings"
             ],
-            "time": "2015-01-15 16:31:45"
+            "time": "2015-01-15T16:31:45+00:00"
         },
         {
             "name": "ircmaxell/security-lib",
@@ -100,7 +99,7 @@
             ],
             "description": "A Base Security Library",
             "homepage": "https://github.com/ircmaxell/PHP-SecurityLib",
-            "time": "2013-04-30 18:00:34"
+            "time": "2013-04-30T18:00:34+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -178,7 +177,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-04-12 18:29:35"
+            "time": "2016-04-12T18:29:35+00:00"
         },
         {
             "name": "padraic/humbug_get_contents",
@@ -235,7 +234,7 @@
                 "ssl",
                 "tls"
             ],
-            "time": "2015-04-22 18:45:00"
+            "time": "2015-04-22T18:45:00+00:00"
         },
         {
             "name": "padraic/phar-updater",
@@ -287,7 +286,7 @@
                 "self-update",
                 "update"
             ],
-            "time": "2016-01-05 23:08:01"
+            "time": "2016-01-05T23:08:01+00:00"
         },
         {
             "name": "psr/log",
@@ -325,7 +324,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2012-12-21 11:40:51"
+            "time": "2012-12-21T11:40:51+00:00"
         },
         {
             "name": "symfony/console",
@@ -385,7 +384,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-04-26 12:00:47"
+            "time": "2016-04-26T12:00:47+00:00"
         },
         {
             "name": "symfony/finder",
@@ -434,7 +433,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2016-03-10 11:13:05"
+            "time": "2016-03-10T11:13:05+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -493,7 +492,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-01-20 09:13:37"
+            "time": "2016-01-20T09:13:37+00:00"
         },
         {
             "name": "symfony/process",
@@ -542,7 +541,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2016-04-14 15:22:22"
+            "time": "2016-04-14T15:22:22+00:00"
         },
         {
             "name": "typo3/surf",
@@ -589,10 +588,38 @@
                 "GPL-3.0+"
             ],
             "description": "TYPO3 Surf is a deployment tool, suited for a wide variety of applications",
-            "time": "2016-04-13 12:27:12"
+            "time": "2016-04-13T12:27:12+00:00"
         }
     ],
     "packages-dev": [
+        {
+            "name": "de-swebhosting/php-codestyle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/astehlik/php-codestyle.git",
+                "reference": "815db91986c3921d5e503460114c4b6c089eb0dc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/astehlik/php-codestyle/zipball/815db91986c3921d5e503460114c4b6c089eb0dc",
+                "reference": "815db91986c3921d5e503460114c4b6c089eb0dc",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL3+"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander Stehlik",
+                    "email": "alexander.stehlik@gmail.com"
+                }
+            ],
+            "description": "Collection of code style check utilites for PHP.",
+            "time": "2016-11-17T08:36:04+00:00"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.7",
@@ -659,7 +686,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2015-08-31 12:32:49"
+            "time": "2015-08-31T12:32:49+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -729,7 +756,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2015-12-31 16:37:02"
+            "time": "2015-12-31T16:37:02+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -795,7 +822,7 @@
                 "collections",
                 "iterator"
             ],
-            "time": "2015-04-14 22:21:58"
+            "time": "2015-04-14T22:21:58+00:00"
         },
         {
             "name": "doctrine/common",
@@ -868,7 +895,7 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2015-12-25 13:18:31"
+            "time": "2015-12-25T13:18:31+00:00"
         },
         {
             "name": "doctrine/dbal",
@@ -939,7 +966,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2016-01-05 22:11:12"
+            "time": "2016-01-05T22:11:12+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -1006,7 +1033,7 @@
                 "singularize",
                 "string"
             ],
-            "time": "2015-11-06 14:35:42"
+            "time": "2015-11-06T14:35:42+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -1060,7 +1087,7 @@
                 "lexer",
                 "parser"
             ],
-            "time": "2014-09-09 13:34:57"
+            "time": "2014-09-09T13:34:57+00:00"
         },
         {
             "name": "doctrine/migrations",
@@ -1129,7 +1156,7 @@
                 "database",
                 "migrations"
             ],
-            "time": "2016-02-23 15:27:16"
+            "time": "2016-02-23T15:27:16+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -1202,7 +1229,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2015-08-31 13:19:01"
+            "time": "2015-08-31T13:19:01+00:00"
         },
         {
             "name": "neos/composer-plugin",
@@ -1235,7 +1262,7 @@
                 "MIT"
             ],
             "description": "Flow Composer Plugin",
-            "time": "2016-02-17 07:47:07"
+            "time": "2016-02-17T07:47:07+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -1282,7 +1309,7 @@
                 }
             ],
             "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
-            "time": "2016-04-23 17:52:40"
+            "time": "2016-04-23T17:52:40+00:00"
         },
         {
             "name": "ocramius/proxy-manager",
@@ -1346,7 +1373,7 @@
                 "proxy pattern",
                 "service proxies"
             ],
-            "time": "2016-02-08 13:50:05"
+            "time": "2016-02-08T13:50:05+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -1394,7 +1421,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-03-18 20:34:03"
+            "time": "2016-03-18T20:34:03+00:00"
         },
         {
             "name": "ramsey/uuid",
@@ -1474,7 +1501,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2016-04-24 00:30:41"
+            "time": "2016-04-24T00:30:41+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -1552,7 +1579,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2016-04-03 22:58:34"
+            "time": "2016-04-03T22:58:34+00:00"
         },
         {
             "name": "symfony/dom-crawler",
@@ -1605,7 +1632,7 @@
             ],
             "description": "Symfony DomCrawler Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-03 08:01:13"
+            "time": "2015-01-03T08:01:13+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -1652,7 +1679,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-25 04:37:39"
+            "time": "2015-01-25T04:37:39+00:00"
         },
         {
             "name": "zendframework/zend-code",
@@ -1705,7 +1732,7 @@
                 "code",
                 "zf2"
             ],
-            "time": "2016-04-20 17:34:49"
+            "time": "2016-04-20T17:34:49+00:00"
         },
         {
             "name": "zendframework/zend-eventmanager",
@@ -1759,13 +1786,14 @@
                 "events",
                 "zf2"
             ],
-            "time": "2016-02-18 20:53:00"
+            "time": "2016-02-18T20:53:00+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "typo3/surf": 10
+        "typo3/surf": 10,
+        "de-swebhosting/php-codestyle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

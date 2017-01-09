@@ -16,7 +16,7 @@ before_install:
   - if [ "$GITHUB_COMPOSER_AUTH" ]; then composer config -g github-oauth.github.com $GITHUB_COMPOSER_AUTH; fi
 
 before_script:
-  - vendor/bin/phpcs --config-set installed_paths tests/CodeSniffer
+  - ./vendor/bin/phpcs --config-set installed_paths vendor/de-swebhosting/php-codestyle/PhpCodeSniffer
 
 script:
   - >
