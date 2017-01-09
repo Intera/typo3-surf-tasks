@@ -16,6 +16,7 @@ before_install:
   - if [ "$GITHUB_COMPOSER_AUTH" ]; then composer config -g github-oauth.github.com $GITHUB_COMPOSER_AUTH; fi
 
 before_script:
+  - composer install
   - ./vendor/bin/phpcs --config-set installed_paths vendor/de-swebhosting/php-codestyle/PhpCodeSniffer
 
 script:
@@ -23,4 +24,3 @@ script:
     echo;
     echo "Running phpcs";
     ./vendor/bin/phpcs --standard=PSRDefault src
-
