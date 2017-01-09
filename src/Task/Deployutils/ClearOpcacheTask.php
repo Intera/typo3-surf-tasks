@@ -20,8 +20,8 @@ class ClearOpcacheTask extends \TYPO3\Surf\Task\Test\HttpTestTask
      * @return void
      * @throws \TYPO3\Surf\Exception\InvalidConfigurationException
      */
-    public function execute(Node $node, Application $application, Deployment $deployment, array $options = array()) {
-
+    public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
+    {
         if (!$node->getOption('webBaseUrl')) {
             throw new \InvalidArgumentException(
                 'The webBaseUrl option must be set in all nodes for which the ClearOpcacheTask should be executed.'
@@ -45,5 +45,4 @@ class ClearOpcacheTask extends \TYPO3\Surf\Task\Test\HttpTestTask
         $this->assertExpectedStatus(['expectedStatus' => 200], $result);
         $this->assertExpectedRegexp(['expectedRegexp' => '/success/'], $result);
     }
-
 }

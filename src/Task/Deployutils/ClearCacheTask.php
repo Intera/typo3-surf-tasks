@@ -11,7 +11,8 @@ class ClearCacheTask extends AbstractDeployCommandTask
      *
      * @return array
      */
-    protected function getCliArguments() {
+    protected function getCliArguments()
+    {
         return ['deploylocal:flushcache'];
     }
 }

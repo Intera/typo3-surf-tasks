@@ -27,9 +27,7 @@ class CreateSharedDirectoriesTask extends Task implements ShellCommandServiceAwa
             return;
         }
 
-        $commands = [
-            'cd ' . $application->getSharedPath()
-        ];
+        $commands = ['cd ' . $application->getSharedPath()];
         foreach ($options['directories'] as $path) {
             $commands[] = 'mkdir -p ' . $path;
         }
