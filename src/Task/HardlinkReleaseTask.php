@@ -53,7 +53,7 @@ class HardlinkReleaseTask extends Task implements ShellCommandServiceAwareInterf
     {
         $releasesPath = $application->getReleasesPath();
         $this->shell->execute(
-            'cd ' . $releasesPath . ' && rm -f ./current && mv ./previous ./current',
+            'cd ' . $releasesPath . ' && rm -Rf ./current && mv ./previous ./current',
             $node,
             $deployment,
             true
