@@ -32,7 +32,7 @@ abstract class AbstractDeployCommandTask extends \TYPO3\Surf\Task\TYPO3\CMS\Abst
         /* @var \TYPO3\Surf\Application\TYPO3\CMS $application */
         $this->ensureApplicationIsTypo3Cms($application);
 
-        if (!$this->packageExists('deployutils', $node, $application, $deployment)) {
+        if (!$this->packageExists('deployutils', $node, $application, $deployment, $options)) {
             $deployment->getLogger()->warning(
                 'The Extension "deployutils" was not found! Make sure one is available in your project, or remove' .
                 ' this task (' . __CLASS__ . ') from your deployment configuration!'
@@ -40,7 +40,8 @@ abstract class AbstractDeployCommandTask extends \TYPO3\Surf\Task\TYPO3\CMS\Abst
             return;
         }
 
-        $cliArguments = array_merge(['typo3/cli_dispatch.phpsh', 'extbase'], $this->getCliArguments());
+        $webDirectory = isset($options['webDirectory']) ? trim($options['webDirectory'], '\\/') . '/' : '';
+        $cliArguments = array_merge([$webDirectory . 'typo3/cli_dispatch.phpsh', 'extbase'], $this->getCliArguments());
 
         $this->executeCliCommand($cliArguments, $node, $application, $deployment, $options);
     }
