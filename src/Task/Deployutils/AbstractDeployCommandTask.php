@@ -40,7 +40,7 @@ abstract class AbstractDeployCommandTask extends \TYPO3\Surf\Task\TYPO3\CMS\Abst
             return;
         }
 
-        $webDirectory = isset($options['webDirectory']) ? trim($options['webDirectory'], '\\/') . '/' : '';
+        $webDirectory = !empty($options['webDirectory']) ? trim($options['webDirectory'], '\\/') . '/' : '';
         $cliArguments = array_merge([$webDirectory . 'typo3/cli_dispatch.phpsh', 'extbase'], $this->getCliArguments());
 
         $this->executeCliCommand($cliArguments, $node, $application, $deployment, $options);
