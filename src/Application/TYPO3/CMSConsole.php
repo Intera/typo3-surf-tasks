@@ -83,8 +83,8 @@ class CMSConsole extends SurfCMS
             'TYPO3\\Surf\\Task\\ShellTask',
             [
                 'command' => [
-                    "rm {releasePath}/web/index.php",
-                    "cp {releasePath}/vendor/typo3/cms/index.php {releasePath}/web/index.php",
+                    'rm {releasePath}/web/index.php',
+                    'cp {releasePath}/vendor/typo3/cms/index.php {releasePath}/web/index.php',
                 ],
             ]
         );
@@ -98,8 +98,8 @@ class CMSConsole extends SurfCMS
             'TYPO3\\Surf\\Task\\ShellTask',
             [
                 'command' => [
-                    "cp {sharedPath}/.env {releasePath}/.env",
-                    "cd {releasePath}",
+                    'cp {sharedPath}/.env {releasePath}/.env',
+                    'cd {releasePath}',
                 ],
             ]
         );
@@ -114,9 +114,7 @@ class CMSConsole extends SurfCMS
         $workflow->defineTask(
             'Intera\\Surf\\DefinedTask\\Grunt\\YarnTask',
             YarnTask::class,
-            [
-                'forceLocalMode' => true,
-            ]
+            ['forceLocalMode' => true]
         );
         $workflow->afterTask(
             'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
