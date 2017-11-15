@@ -9,6 +9,7 @@ use TYPO3\Surf\Application\TYPO3\CMS as SurfCMS;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\SimpleWorkflow;
 use TYPO3\Surf\Domain\Model\Workflow;
+use TYPO3\Surf\Task\TYPO3\CMS\RunCommandTask;
 
 /**
  * TYPO3 CMS deployment with the TYPO3 console.
@@ -24,23 +25,18 @@ class CMSConsole extends SurfCMS
     {
         parent::__construct($name);
         $this->setOption('keepReleases', 3);
-        $this->setOption('TYPO3\\Surf\\Task\\TYPO3\\CMS\\SetUpExtensionsTask[scriptFileName]', 'typo3cms');
-        $this->setOption('TYPO3\\Surf\\Task\\TYPO3\\CMS\\FlushCachesTask[scriptFileName]', 'typo3cms');
-        $this->setOption('TYPO3\\Surf\\Task\\TYPO3\\CMS\\SymlinkDataTask[applicationRootDirectory]', 'web');
-        $this->setOption('TYPO3\\Surf\\Task\\TYPO3\\CMS\\SymlinkDataTask[directories]', ['web/typo3conf/l10n']);
 
         $this->setOption(
             'TYPO3\\Surf\\Task\\Transfer\\RsyncTask[rsyncExcludes]',
             [
                 '.git',
                 'web/fileadmin',
-                'web/typo3conf/l10n',
                 'web/uploads',
                 'node_modules',
                 'Resources/Public/Build/Temp',
             ]
         );
-        $this->setOption('applicationWebDirectory', 'web');
+
         $this->setOption('composerCommandPath', 'composer');
         $this->setContext('Production');
     }
@@ -61,55 +57,87 @@ class CMSConsole extends SurfCMS
 
         $this->replaceSymlinkWithHardlinkRelease($workflow);
 
-        $this->registerEnvAwareTask($workflow);
-
-        $this->registerCopyIndexPhpTask($workflow);
+        $this->defineMarkInstalledTask($workflow);
+        $this->defineDumpSettingsTask($workflow);
+        $this->defineDatabaseUpdateTask($workflow);
+        $this->defineFlushFilesCacheTask($workflow);
 
         $this->registerYarnTask($workflow);
 
-        $this->moveCacheFlushingToFinalizeStage($workflow);
+        $this->removeObsoleteConfigTasks($workflow);
+        $this->registerCustomTasks($workflow);
     }
 
-    protected function moveCacheFlushingToFinalizeStage(Workflow $workflow)
-    {
-        $workflow->removeTask('TYPO3\\Surf\\Task\\TYPO3\\CMS\\FlushCachesTask');
-        $workflow->forStage('finalize', 'TYPO3\\Surf\\Task\\TYPO3\\CMS\\FlushCachesTask');
-    }
-
-    protected function registerCopyIndexPhpTask(Workflow $workflow)
+    private function defineDatabaseUpdateTask(Workflow $workflow)
     {
         $workflow->defineTask(
-            'Helhum\\TYPO3\\Distribution\\DefinedTask\\CopyIndexPhp',
-            'TYPO3\\Surf\\Task\\ShellTask',
+            'Helhum\\TYPO3\\Distribution\\DefinedTask\\UpdateDBSchema',
+            'TYPO3\\Surf\\Task\\TYPO3\\CMS\\RunCommandTask',
             [
-                'command' => [
-                    'rm {releasePath}/web/index.php',
-                    'cp {releasePath}/vendor/typo3/cms/index.php {releasePath}/web/index.php',
+                'command' => 'database:updateschema',
+            ]
+        );
+    }
+
+    private function defineDumpSettingsTask(Workflow $workflow)
+    {
+        $workflow->defineTask(
+            'Helhum\\TYPO3\\Distribution\\DefinedTask\\DumpConfiguration',
+            RunCommandTask::class,
+            [
+                'command' => 'settings:dump',
+                'arguments' => [
+                    '--no-dev',
                 ],
             ]
         );
-        $workflow->afterStage('transfer', 'Helhum\\TYPO3\\Distribution\\DefinedTask\\CopyIndexPhp');
     }
-
-    protected function registerEnvAwareTask(Workflow $workflow)
+    private function defineFlushFilesCacheTask(Workflow $workflow)
     {
         $workflow->defineTask(
-            'Helhum\\TYPO3\\Distribution\\DefinedTask\\EnvAwareTask',
-            'TYPO3\\Surf\\Task\\ShellTask',
+            'Helhum\\TYPO3\\Distribution\\DefinedTask\\FlushFileCaches',
+            'TYPO3\\Surf\\Task\\TYPO3\\CMS\\RunCommandTask',
             [
-                'command' => [
-                    'cp {sharedPath}/.env {releasePath}/.env',
-                    'cd {releasePath}',
+                'command' => 'cache:flush',
+                'arguments' => [
+                    '--files-only',
                 ],
             ]
+        );
+    }
+
+    private function defineMarkInstalledTask(Workflow $workflow)
+    {
+        $workflow->defineTask(
+            'Helhum\\TYPO3\\Distribution\\DefinedTask\\MarkInstalled',
+            'TYPO3\\Surf\\Task\\LocalShellTask',
+            [
+                'command' => 'touch {workspacePath}/.installed',
+            ]
+        );
+    }
+
+    private function registerCustomTasks(Workflow $workflow)
+    {
+        $workflow->afterTask(
+            'TYPO3\\Surf\\Task\\Package\\GitTask',
+            'Helhum\\TYPO3\\Distribution\\DefinedTask\\MarkInstalled'
+        );
+        $workflow->afterStage(
+            'transfer',
+            'Helhum\\TYPO3\\Distribution\\DefinedTask\\DumpConfiguration'
         );
         $workflow->beforeTask(
-            'TYPO3\\Surf\\Task\\TYPO3\\CMS\\CreatePackageStatesTask',
-            'Helhum\\TYPO3\\Distribution\\DefinedTask\\EnvAwareTask'
+            'TYPO3\\Surf\\Task\\TYPO3\\CMS\\SetUpExtensionsTask',
+            'Helhum\\TYPO3\\Distribution\\DefinedTask\\UpdateDBSchema'
+        );
+        $workflow->afterTask(
+            'Helhum\\TYPO3\\Distribution\\DefinedTask\\UpdateDBSchema',
+            'Helhum\\TYPO3\\Distribution\\DefinedTask\\FlushFileCaches'
         );
     }
 
-    protected function registerYarnTask(Workflow $workflow)
+    private function registerYarnTask(Workflow $workflow)
     {
         $workflow->defineTask(
             'Intera\\Surf\\DefinedTask\\Grunt\\YarnTask',
@@ -122,7 +150,13 @@ class CMSConsole extends SurfCMS
         );
     }
 
-    protected function replaceSymlinkWithHardlinkRelease(Workflow $workflow)
+    private function removeObsoleteConfigTasks(Workflow $workflow)
+    {
+        $workflow->removeTask('TYPO3\\Surf\\Task\\TYPO3\\CMS\\CopyConfigurationTask');
+        $workflow->removeTask('TYPO3\\Surf\\Task\\TYPO3\\CMS\\CreatePackageStatesTask');
+    }
+
+    private function replaceSymlinkWithHardlinkRelease(Workflow $workflow)
     {
         $workflow->removeTask('TYPO3\\Surf\\Task\\SymlinkReleaseTask');
         $workflow->addTask(HardlinkReleaseTask::class, 'switch');
