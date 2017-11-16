@@ -73,9 +73,7 @@ class CMSConsole extends SurfCMS
         $workflow->defineTask(
             'Helhum\\TYPO3\\Distribution\\DefinedTask\\UpdateDBSchema',
             'TYPO3\\Surf\\Task\\TYPO3\\CMS\\RunCommandTask',
-            [
-                'command' => 'database:updateschema',
-            ]
+            ['command' => 'database:updateschema']
         );
     }
 
@@ -86,9 +84,7 @@ class CMSConsole extends SurfCMS
             RunCommandTask::class,
             [
                 'command' => 'settings:dump',
-                'arguments' => [
-                    '--no-dev',
-                ],
+                'arguments' => ['--no-dev'],
             ]
         );
     }
@@ -99,9 +95,7 @@ class CMSConsole extends SurfCMS
             'TYPO3\\Surf\\Task\\TYPO3\\CMS\\RunCommandTask',
             [
                 'command' => 'cache:flush',
-                'arguments' => [
-                    '--files-only',
-                ],
+                'arguments' => ['--files-only'],
             ]
         );
     }
@@ -111,9 +105,7 @@ class CMSConsole extends SurfCMS
         $workflow->defineTask(
             'Helhum\\TYPO3\\Distribution\\DefinedTask\\MarkInstalled',
             'TYPO3\\Surf\\Task\\LocalShellTask',
-            [
-                'command' => 'touch {workspacePath}/.installed',
-            ]
+            ['command' => 'touch {workspacePath}/.installed']
         );
     }
 
