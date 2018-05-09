@@ -1,4 +1,5 @@
 <?php
+
 namespace Intera\Surf\Task;
 
 use TYPO3\Surf\Domain\Model\Application;
@@ -28,15 +29,22 @@ class HardlinkReleaseTask extends Task implements ShellCommandServiceAwareInterf
     {
         $releaseIdentifier = $deployment->getReleaseIdentifier();
         $releasesPath = $application->getReleasesPath();
+        /** @noinspection PhpParamsInspection */
         $this->shell->executeOrSimulate(
-            'cd ' . $releasesPath . ' && rm -Rf ./previous && if [ -e ./current ]; then mv ./current ./previous; fi'
-            . ' && cp -al ./' . $releaseIdentifier . ' ./current && rm -f ./next',
+            [
+                'cd ' . $releasesPath,
+                'rm -f ./next',
+                'cp -al ./' . $releaseIdentifier . ' ./next',
+                'rm -Rf ./previous',
+                'if [ -e ./current ]; then mv ./current ./previous; fi',
+                'mv ./next ./current',
+            ],
             $node,
             $deployment
         );
         $deployment->getLogger()->notice(
-            '<success>Node "' . $node->getName() . '" ' . ($deployment->isDryRun(
-            ) ? 'would be' : 'is') . ' live!</success>'
+            '<success>Node "' . $node->getName() . '" '
+            . ($deployment->isDryRun() ? 'would be' : 'is') . ' live!</success>'
         );
     }
 
@@ -53,7 +61,11 @@ class HardlinkReleaseTask extends Task implements ShellCommandServiceAwareInterf
     {
         $releasesPath = $application->getReleasesPath();
         $this->shell->execute(
-            'cd ' . $releasesPath . ' && rm -Rf ./current && mv ./previous ./current',
+            [
+                'cd ' . $releasesPath,
+                'rm -Rf ./current',
+                'mv ./previous ./current',
+            ],
             $node,
             $deployment,
             true
