@@ -23,7 +23,7 @@ class CMS extends SurfCMS
             $this->options,
             [
                 'composerCommandPath' => 'composer',
-                'composerFlags' => '--ignore-platform-reqs --prefer-dist',
+                'composerFlags' => '--prefer-dist',
                 'keepReleases' => 3,
                 'rsyncExcludes' => [
                     'deployment',
