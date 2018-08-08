@@ -30,8 +30,11 @@ class CMSConsole extends SurfCMS
             'TYPO3\\Surf\\Task\\Transfer\\RsyncTask[rsyncExcludes]',
             [
                 '.git',
-                'web/fileadmin',
-                'web/uploads',
+                '.ddev',
+                '.idea',
+                '/deployment',
+                '/web/fileadmin',
+                '/web/uploads',
                 'node_modules',
                 'Resources/Public/Build/Temp',
             ]
