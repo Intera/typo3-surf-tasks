@@ -71,6 +71,19 @@ class CMSConsole extends SurfCMS
         $this->registerCustomTasks($workflow);
     }
 
+    protected function registerYarnTask(Workflow $workflow)
+    {
+        $workflow->defineTask(
+            'Intera\\Surf\\DefinedTask\\Grunt\\YarnTask',
+            YarnTask::class,
+            ['forceLocalMode' => true]
+        );
+        $workflow->afterTask(
+            'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
+            'Intera\\Surf\\DefinedTask\\Grunt\\YarnTask'
+        );
+    }
+
     private function defineDatabaseUpdateTask(Workflow $workflow)
     {
         $workflow->defineTask(
@@ -91,6 +104,7 @@ class CMSConsole extends SurfCMS
             ]
         );
     }
+
     private function defineFlushFilesCacheTask(Workflow $workflow)
     {
         $workflow->defineTask(
@@ -129,19 +143,6 @@ class CMSConsole extends SurfCMS
         $workflow->afterTask(
             'Helhum\\TYPO3\\Distribution\\DefinedTask\\UpdateDBSchema',
             'Helhum\\TYPO3\\Distribution\\DefinedTask\\FlushFileCaches'
-        );
-    }
-
-    private function registerYarnTask(Workflow $workflow)
-    {
-        $workflow->defineTask(
-            'Intera\\Surf\\DefinedTask\\Grunt\\YarnTask',
-            YarnTask::class,
-            ['forceLocalMode' => true]
-        );
-        $workflow->afterTask(
-            'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
-            'Intera\\Surf\\DefinedTask\\Grunt\\YarnTask'
         );
     }
 
