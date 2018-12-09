@@ -28,7 +28,7 @@ class WebpackTask extends Task implements ShellCommandServiceAwareInterface
      */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
-        $webpackNode = $deployment->getNode('localhost');;
+        $webpackNode = $deployment->getNode('localhost');
         $webpackRootPath = '{workspacePath}';
 
         if (!empty($options['webpackRootPath'])) {
