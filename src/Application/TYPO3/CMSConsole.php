@@ -29,6 +29,8 @@ class CMSConsole extends SurfCMS
         $this->setOption(
             'TYPO3\\Surf\\Task\\Transfer\\RsyncTask[rsyncExcludes]',
             [
+                '.composercache',
+                '.yarn-cache',
                 '.git',
                 '.ddev',
                 '.idea',
