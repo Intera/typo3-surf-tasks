@@ -63,7 +63,6 @@ class CMSConsole extends SurfCMS
         $this->replaceSymlinkWithHardlinkRelease($workflow);
 
         $this->defineMarkInstalledTask($workflow);
-        $this->defineDumpSettingsTask($workflow);
         $this->defineDatabaseUpdateTask($workflow);
         $this->defineFlushFilesCacheTask($workflow);
 
@@ -95,18 +94,6 @@ class CMSConsole extends SurfCMS
         );
     }
 
-    private function defineDumpSettingsTask(Workflow $workflow)
-    {
-        $workflow->defineTask(
-            'Helhum\\TYPO3\\Distribution\\DefinedTask\\DumpConfiguration',
-            RunCommandTask::class,
-            [
-                'command' => 'settings:dump',
-                'arguments' => ['--no-dev'],
-            ]
-        );
-    }
-
     private function defineFlushFilesCacheTask(Workflow $workflow)
     {
         $workflow->defineTask(
@@ -133,10 +120,6 @@ class CMSConsole extends SurfCMS
         $workflow->afterTask(
             'TYPO3\\Surf\\Task\\Package\\GitTask',
             'Helhum\\TYPO3\\Distribution\\DefinedTask\\MarkInstalled'
-        );
-        $workflow->afterStage(
-            'transfer',
-            'Helhum\\TYPO3\\Distribution\\DefinedTask\\DumpConfiguration'
         );
         $workflow->beforeTask(
             'TYPO3\\Surf\\Task\\TYPO3\\CMS\\SetUpExtensionsTask',
