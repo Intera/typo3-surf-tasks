@@ -65,6 +65,7 @@ class CMSConsole extends SurfCMS
 
         $this->replaceSymlinkWithHardlinkRelease($workflow);
 
+        $this->defineFixFolderStructureTask($workflow);
         $this->defineDatabaseUpdateTask($workflow);
         $this->defineFlushFilesCacheTask($workflow);
 
@@ -96,6 +97,15 @@ class CMSConsole extends SurfCMS
         );
     }
 
+    private function defineFixFolderStructureTask(Workflow $workflow)
+    {
+        $workflow->defineTask(
+            'Intera\\Surf\\DefinedTask\\FixFolderStructure',
+            RunCommandTask::class,
+            ['command' => 'install:fixfolderstructure']
+        );
+    }
+
     private function defineFlushFilesCacheTask(Workflow $workflow)
     {
         $workflow->defineTask(
@@ -114,6 +124,12 @@ class CMSConsole extends SurfCMS
             'TYPO3\\Surf\\Task\\TYPO3\\CMS\\SetUpExtensionsTask',
             'Helhum\\TYPO3\\Distribution\\DefinedTask\\UpdateDBSchema'
         );
+
+        $workflow->beforeTask(
+            'Helhum\\TYPO3\\Distribution\\DefinedTask\\UpdateDBSchema',
+            'Intera\\Surf\\DefinedTask\\FixFolderStructure'
+        );
+
         $workflow->afterTask(
             'Helhum\\TYPO3\\Distribution\\DefinedTask\\UpdateDBSchema',
             'Helhum\\TYPO3\\Distribution\\DefinedTask\\FlushFileCaches'
