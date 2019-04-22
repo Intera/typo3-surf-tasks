@@ -62,7 +62,6 @@ class CMSConsole extends SurfCMS
 
         $this->replaceSymlinkWithHardlinkRelease($workflow);
 
-        $this->defineMarkInstalledTask($workflow);
         $this->defineDatabaseUpdateTask($workflow);
         $this->defineFlushFilesCacheTask($workflow);
 
@@ -106,21 +105,8 @@ class CMSConsole extends SurfCMS
         );
     }
 
-    private function defineMarkInstalledTask(Workflow $workflow)
-    {
-        $workflow->defineTask(
-            'Helhum\\TYPO3\\Distribution\\DefinedTask\\MarkInstalled',
-            'TYPO3\\Surf\\Task\\LocalShellTask',
-            ['command' => 'touch {workspacePath}/.installed']
-        );
-    }
-
     private function registerCustomTasks(Workflow $workflow)
     {
-        $workflow->afterTask(
-            'TYPO3\\Surf\\Task\\Package\\GitTask',
-            'Helhum\\TYPO3\\Distribution\\DefinedTask\\MarkInstalled'
-        );
         $workflow->beforeTask(
             'TYPO3\\Surf\\Task\\TYPO3\\CMS\\SetUpExtensionsTask',
             'Helhum\\TYPO3\\Distribution\\DefinedTask\\UpdateDBSchema'
