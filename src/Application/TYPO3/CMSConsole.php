@@ -84,7 +84,8 @@ class CMSConsole extends SurfCMS
         );
         $workflow->afterTask(
             'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
-            'Intera\\Surf\\DefinedTask\\Grunt\\YarnTask'
+            'Intera\\Surf\\DefinedTask\\Grunt\\YarnTask',
+            $this
         );
     }
 
@@ -122,17 +123,20 @@ class CMSConsole extends SurfCMS
     {
         $workflow->beforeTask(
             'TYPO3\\Surf\\Task\\TYPO3\\CMS\\SetUpExtensionsTask',
-            'Helhum\\TYPO3\\Distribution\\DefinedTask\\UpdateDBSchema'
+            'Helhum\\TYPO3\\Distribution\\DefinedTask\\UpdateDBSchema',
+            $this
         );
 
         $workflow->beforeTask(
             'Helhum\\TYPO3\\Distribution\\DefinedTask\\UpdateDBSchema',
-            'Intera\\Surf\\DefinedTask\\FixFolderStructure'
+            'Intera\\Surf\\DefinedTask\\FixFolderStructure',
+            $this
         );
 
         $workflow->afterTask(
             'Helhum\\TYPO3\\Distribution\\DefinedTask\\UpdateDBSchema',
-            'Helhum\\TYPO3\\Distribution\\DefinedTask\\FlushFileCaches'
+            'Helhum\\TYPO3\\Distribution\\DefinedTask\\FlushFileCaches',
+            $this
         );
     }
 
