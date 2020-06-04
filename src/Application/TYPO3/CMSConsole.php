@@ -9,9 +9,11 @@ use TYPO3\Surf\Application\TYPO3\CMS as SurfCMS;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\SimpleWorkflow;
 use TYPO3\Surf\Domain\Model\Workflow;
+use TYPO3\Surf\Task\ShellTask;
 use TYPO3\Surf\Task\SymlinkReleaseTask;
 use TYPO3\Surf\Task\TYPO3\CMS\CopyConfigurationTask;
 use TYPO3\Surf\Task\TYPO3\CMS\CreatePackageStatesTask;
+use TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask;
 use TYPO3\Surf\Task\TYPO3\CMS\RunCommandTask;
 
 /**
@@ -150,5 +152,17 @@ class CMSConsole extends SurfCMS
     {
         $workflow->removeTask(SymlinkReleaseTask::class);
         $workflow->addTask(HardlinkReleaseTask::class, 'switch');
+
+        // We also have to replace the cache flush task because it normally runs in the
+        // release directory and we need to run it in the current directory.
+        $workflow->removeTask(FlushCachesTask::class);
+
+        $flushCacheCommand = '{currentPath}/' . $this->getOption('scriptFileName') . 'cache:flush';
+        $workflow->defineTask(
+            'Intera\\Surf\\DefinedTask\\FlushCachesTask',
+            ShellTask::class,
+            ['command' => $flushCacheCommand]
+        );
+        $workflow->afterStage('switch', 'Intera\\Surf\\DefinedTask\\FlushCachesTask', $this);
     }
 }
