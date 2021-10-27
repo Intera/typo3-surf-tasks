@@ -157,11 +157,18 @@ class CMSConsole extends SurfCMS
         // release directory and we need to run it in the current directory.
         $workflow->removeTask(FlushCachesTask::class);
 
-        $flushCacheCommand = '{currentPath}/' . $this->getOption('scriptFileName') . 'cache:flush';
+        $phpBinaryPathAndFilename = $this->getOption('phpBinaryPathAndFilename') ?? 'php';
+        $flushCacheCommand = $phpBinaryPathAndFilename
+            . ' {currentPath}/' . $this->getOption('scriptFileName')
+            . ' cache:flush';
+        $commands = [
+            'rm {currentPath}/var/cache -Rf',
+            $flushCacheCommand,
+        ];
         $workflow->defineTask(
             'Intera\\Surf\\DefinedTask\\FlushCachesTask',
             ShellTask::class,
-            ['command' => $flushCacheCommand]
+            ['command' => $commands]
         );
         $workflow->afterStage('switch', 'Intera\\Surf\\DefinedTask\\FlushCachesTask', $this);
     }
