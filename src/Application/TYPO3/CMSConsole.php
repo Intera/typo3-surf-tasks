@@ -151,7 +151,7 @@ class CMSConsole extends SurfCMS
     private function replaceSymlinkWithHardlinkRelease(Workflow $workflow)
     {
         $workflow->removeTask(SymlinkReleaseTask::class);
-        $workflow->addTask(HardlinkReleaseTask::class, 'switch');
+        $workflow->addTask(HardlinkReleaseTask::class, 'switch', $this);
 
         // We also have to replace the cache flush task because it normally runs in the
         // release directory and we need to run it in the current directory.
