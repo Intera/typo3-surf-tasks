@@ -77,6 +77,14 @@ class CMSConsole extends SurfCMS
         $this->registerCustomTasks($workflow);
     }
 
+    protected function getOptionValueOr(string $option, $fallback)
+    {
+        if (!$this->hasOption($option)) {
+            return $fallback;
+        }
+        return $this->getOption($option) ?: $fallback;
+    }
+
     protected function registerYarnTask(Workflow $workflow)
     {
         $workflow->defineTask(
@@ -157,7 +165,7 @@ class CMSConsole extends SurfCMS
         // release directory and we need to run it in the current directory.
         $workflow->removeTask(FlushCachesTask::class);
 
-        $phpBinaryPathAndFilename = $this->getOption('phpBinaryPathAndFilename') ?? 'php';
+        $phpBinaryPathAndFilename = $this->getOptionValueOr('phpBinaryPathAndFilename', 'php');
         $flushCacheCommand = $phpBinaryPathAndFilename
             . ' {currentPath}/' . $this->getOption('scriptFileName')
             . ' cache:flush';
