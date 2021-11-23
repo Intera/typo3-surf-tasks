@@ -122,10 +122,7 @@ class CMSConsole extends SurfCMS
         $workflow->defineTask(
             'Helhum\\TYPO3\\Distribution\\DefinedTask\\FlushFileCaches',
             RunCommandTask::class,
-            [
-                'command' => 'cache:flush',
-                'arguments' => ['--files-only'],
-            ]
+            ['command' => 'cache:flush']
         );
     }
 
