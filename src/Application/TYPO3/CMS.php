@@ -1,6 +1,11 @@
 <?php
+
 namespace Intera\Surf\Application\TYPO3;
 
+use Intera\Surf\Task\Composer\InstallTask;
+use Intera\Surf\Task\Deployutils\ClearCacheTask;
+use Intera\Surf\Task\Deployutils\ClearOpcacheTask;
+use Intera\Surf\Task\Grunt\BuildTask;
 use TYPO3\Surf\Application\TYPO3\CMS as SurfCMS;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Workflow;
@@ -16,7 +21,7 @@ class CMS extends SurfCMS
      *
      * @param string $name
      */
-    public function __construct($name)
+    public function __construct(string $name = 'TYPO3 CMS')
     {
         parent::__construct($name);
         $this->options = array_merge(
@@ -35,7 +40,7 @@ class CMS extends SurfCMS
                     'node_modules',
                     'surf',
                     'dynamicReturnTypeMeta.json',
-                ]
+                ],
             ]
         );
     }
@@ -47,16 +52,16 @@ class CMS extends SurfCMS
      * @param Deployment $deployment
      * @return void
      */
-    public function registerTasks(Workflow $workflow, Deployment $deployment)
+    public function registerTasks(Workflow $workflow, Deployment $deployment): void
     {
         parent::registerTasks($workflow, $deployment);
         $workflow->removeTask('TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask');
         $workflow->defineTask(
             'TYPO3\\Surf\\DefinedTask\\Composer\\LocalInstallTask',
-            \Intera\Surf\Task\Composer\InstallTask::class,
+            InstallTask::class,
             [
                 'nodeName' => 'localhost',
-                'useApplicationWorkspace' => true
+                'useApplicationWorkspace' => true,
             ]
         );
         $workflow->afterTask(
@@ -79,7 +84,7 @@ class CMS extends SurfCMS
     {
         $workflow->afterStage(
             'switch',
-            \Intera\Surf\Task\Deployutils\ClearCacheTask::class,
+            ClearCacheTask::class,
             $this
         );
     }
@@ -99,7 +104,7 @@ class CMS extends SurfCMS
 
         $workflow->afterStage(
             'switch',
-            \Intera\Surf\Task\Deployutils\ClearOpcacheTask::class,
+            ClearOpcacheTask::class,
             $this
         );
     }
@@ -119,11 +124,11 @@ class CMS extends SurfCMS
 
         $workflow->defineTask(
             'Intera\\Surf\\DefinedTask\\Grunt\\BuildTask',
-            \Intera\Surf\Task\Grunt\BuildTask::class,
+            BuildTask::class,
             [
                 'forceLocalMode' => true,
                 'gruntRootPath' => $projectExtensionPath . '/Resources/Private/Build',
-                'skipMissingDirectory' => true
+                'skipMissingDirectory' => true,
             ]
         );
         $workflow->afterTask(

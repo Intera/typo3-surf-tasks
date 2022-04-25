@@ -16,20 +16,10 @@ class HardlinkReleaseTask extends Task implements ShellCommandServiceAwareInterf
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * Executes this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     * @return void
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         $releaseIdentifier = $deployment->getReleaseIdentifier();
         $releasesPath = $application->getReleasesPath();
-        /** @noinspection PhpParamsInspection */
         $this->shell->executeOrSimulate(
             [
                 'cd ' . $releasesPath,
@@ -48,16 +38,7 @@ class HardlinkReleaseTask extends Task implements ShellCommandServiceAwareInterf
         );
     }
 
-    /**
-     * Rollback this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     * @return void
-     */
-    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $releasesPath = $application->getReleasesPath();
         $this->shell->execute(
@@ -72,16 +53,7 @@ class HardlinkReleaseTask extends Task implements ShellCommandServiceAwareInterf
         );
     }
 
-    /**
-     * Simulate this task
-     *
-     * @param Node $node
-     * @param Application $application
-     * @param Deployment $deployment
-     * @param array $options
-     * @return void
-     */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }

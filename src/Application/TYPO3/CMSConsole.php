@@ -11,8 +11,6 @@ use TYPO3\Surf\Domain\Model\SimpleWorkflow;
 use TYPO3\Surf\Domain\Model\Workflow;
 use TYPO3\Surf\Task\ShellTask;
 use TYPO3\Surf\Task\SymlinkReleaseTask;
-use TYPO3\Surf\Task\TYPO3\CMS\CopyConfigurationTask;
-use TYPO3\Surf\Task\TYPO3\CMS\CreatePackageStatesTask;
 use TYPO3\Surf\Task\TYPO3\CMS\FlushCachesTask;
 use TYPO3\Surf\Task\TYPO3\CMS\RunCommandTask;
 
@@ -26,7 +24,7 @@ class CMSConsole extends SurfCMS
      *
      * @param string $name
      */
-    public function __construct($name = 'TYPO3 CMS')
+    public function __construct(string $name = 'TYPO3 CMS')
     {
         parent::__construct($name);
         $this->setOption('keepReleases', 3);
@@ -55,9 +53,8 @@ class CMSConsole extends SurfCMS
      * Register tasks for this application
      *
      * @param SimpleWorkflow|Workflow $workflow
-     * @param Deployment $deployment
      */
-    public function registerTasks(Workflow $workflow, Deployment $deployment)
+    public function registerTasks(Workflow $workflow, Deployment $deployment): void
     {
         parent::registerTasks($workflow, $deployment);
 
@@ -73,7 +70,6 @@ class CMSConsole extends SurfCMS
 
         $this->registerYarnTask($workflow);
 
-        $this->removeObsoleteConfigTasks($workflow);
         $this->registerCustomTasks($workflow);
     }
 
@@ -145,12 +141,6 @@ class CMSConsole extends SurfCMS
             'Helhum\\TYPO3\\Distribution\\DefinedTask\\FlushFileCaches',
             $this
         );
-    }
-
-    private function removeObsoleteConfigTasks(Workflow $workflow)
-    {
-        $workflow->removeTask(CopyConfigurationTask::class);
-        $workflow->removeTask(CreatePackageStatesTask::class);
     }
 
     private function replaceSymlinkWithHardlinkRelease(Workflow $workflow)

@@ -1,4 +1,5 @@
 <?php
+
 namespace Intera\Surf\Task\Generic;
 
 use TYPO3\Surf\Domain\Model\Application;
@@ -12,15 +13,6 @@ class CreateSharedDirectoriesTask extends Task implements ShellCommandServiceAwa
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * Execute this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     * @return void
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (!isset($options['directories']) || !is_array($options['directories']) || $options['directories'] === []) {
@@ -35,16 +27,7 @@ class CreateSharedDirectoriesTask extends Task implements ShellCommandServiceAwa
         $this->shell->executeOrSimulate($commands, $node, $deployment);
     }
 
-    /**
-     * Simulate this task
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     * @return void
-     */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }

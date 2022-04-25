@@ -1,6 +1,8 @@
 <?php
+
 namespace Intera\Surf\Task\Generic;
 
+use InvalidArgumentException;
 use TYPO3\Surf\Domain\Model\Application;
 use TYPO3\Surf\Domain\Model\Deployment;
 use TYPO3\Surf\Domain\Model\Node;
@@ -12,25 +14,10 @@ class CopyFilesTask extends Task implements ShellCommandServiceAwareInterface
 {
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * @var Node
-     */
-    protected $node;
+    protected Deployment $deployment;
 
-    /**
-     * @var Deployment
-     */
-    protected $deployment;
+    protected Node $node;
 
-    /**
-     * Executes this action
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     * @return void
-     */
     public function execute(
         Node $node,
         Application $application,
@@ -41,17 +28,17 @@ class CopyFilesTask extends Task implements ShellCommandServiceAwareInterface
         $this->deployment = $deployment;
 
         if (empty($options['sourceDir'])) {
-            throw new \InvalidArgumentException('sourceDir option is missing.');
+            throw new InvalidArgumentException('sourceDir option is missing.');
         }
         if (empty($options['targetDir'])) {
-            throw new \InvalidArgumentException('targetDir option is missing.');
+            throw new InvalidArgumentException('targetDir option is missing.');
         }
         if (empty($options['files'])) {
             $deployment->getLogger()->debug('Files option empty, nothing to copy.');
             return;
         }
         if (!is_array($options['files'])) {
-            throw new \InvalidArgumentException('files option must be an array.');
+            throw new InvalidArgumentException('files option must be an array.');
         }
 
         $sourceDir = rtrim($options['sourceDir'], '/');
@@ -76,7 +63,7 @@ class CopyFilesTask extends Task implements ShellCommandServiceAwareInterface
         }
     }
 
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }

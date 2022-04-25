@@ -1,4 +1,5 @@
 <?php
+
 namespace Intera\Surf\Task\Grunt;
 
 use Intera\Surf\Service\PathReplacementTrait;
@@ -18,15 +19,6 @@ class YarnTask extends Task implements ShellCommandServiceAwareInterface
     use PathReplacementTrait;
     use ShellCommandServiceAwareTrait;
 
-    /**
-     * Executes a composer install in the configured directory.
-     *
-     * @param \TYPO3\Surf\Domain\Model\Node $node
-     * @param \TYPO3\Surf\Domain\Model\Application $application
-     * @param \TYPO3\Surf\Domain\Model\Deployment $deployment
-     * @param array $options
-     * @throws InvalidConfigurationException
-     */
     public function execute(Node $node, Application $application, Deployment $deployment, array $options = [])
     {
         if (empty($options['projectExtensionPath'])) {
@@ -37,7 +29,7 @@ class YarnTask extends Task implements ShellCommandServiceAwareInterface
         }
 
         $projectExtensionPath = rtrim(
-            $this->replacePathPlaceholders($options['projectExtensionPath'], $application, $deployment),
+            $this->replacePathPlaceholders($options['projectExtensionPath'], $application, $deployment, $node),
             '/'
         );
 
@@ -67,7 +59,7 @@ class YarnTask extends Task implements ShellCommandServiceAwareInterface
 				echo "Grunt root path ' . $gruntRootPath . ' does not exist."
 				exit 1;
 			fi
-			
+
 			if [ ! -d ' . $frontendRootPath . ' ]; then
 				echo "Frontend root path ' . $frontendRootPath . ' does not exist."
 				exit 1;
@@ -77,7 +69,7 @@ class YarnTask extends Task implements ShellCommandServiceAwareInterface
 			set -e
 
             cd ' . $frontendRootPath . ' && yarn install
-            
+
 			cd ' . $gruntRootPath . ' && yarn install
 			grunt
 		';
@@ -85,16 +77,7 @@ class YarnTask extends Task implements ShellCommandServiceAwareInterface
         $this->shell->executeOrSimulate($command, $node, $deployment);
     }
 
-    /**
-     * Simulate this task (e.g. by logging commands it would execute)
-     *
-     * @param  Node $node
-     * @param  Application $application
-     * @param  Deployment $deployment
-     * @param  array $options
-     * @return void
-     */
-    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = [])
+    public function simulate(Node $node, Application $application, Deployment $deployment, array $options = []): void
     {
         $this->execute($node, $application, $deployment, $options);
     }
