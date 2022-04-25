@@ -46,6 +46,7 @@ class CMSConsole extends SurfCMS
         );
 
         $this->setOption('composerCommandPath', 'composer');
+        $this->setOption('webDirectory', 'web');
         $this->setContext('Production');
     }
 
