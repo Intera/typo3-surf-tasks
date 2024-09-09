@@ -32,10 +32,8 @@ class HardlinkReleaseTask extends Task implements ShellCommandServiceAwareInterf
             $node,
             $deployment
         );
-        $deployment->getLogger()->notice(
-            '<success>Node "' . $node->getName() . '" '
-            . ($deployment->isDryRun() ? 'would be' : 'is') . ' live!</success>'
-        );
+
+        $this->logger->notice('<success>Node "' . $node->getName() . '" ' . ($deployment->isDryRun() ? 'would be' : 'is') . ' live!</success>');
     }
 
     public function rollback(Node $node, Application $application, Deployment $deployment, array $options = []): void
